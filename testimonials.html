@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Découvrez les témoignages de nos membres. Partagez votre expérience avec FitZone Gym.">
+    <title>Témoignages - FitZone Gym</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="App">
+        <!-- Header -->
+        <header class="network-header">
+            <div class="container">
+                <nav class="nav-wrapper">
+                    <a href="index.html" class="network-logo">
+                        <img src="images/RAINA_RITNESS_LOGO.png" alt="FitZone Gym Logo">
+                        <span>RAINA FITNESS CENTER</span>
+                    </a>
+
+                    <div class="network-nav" id="network-nav" style="display: flex !important;">
+                        <a href="index.html" class="network-nav-link">Accueil</a>
+                        <a href="about.html" class="network-nav-link">À propos</a>
+                        <a href="programs.html" class="network-nav-link">Programmes</a>
+                        <a href="store.html" class="network-nav-link">Store</a>
+                        <a href="testimonials.html" class="network-nav-link active">Témoignages</a>
+                        <a href="contact.html" class="network-nav-link">Contact</a>
+                        <a href="contact.html" class="btn-cta-nav">Réserver</a>
+                    </div>
+
+                    <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="3" y1="12" x2="21" y2="12"/>
+                            <line x1="3" y1="6" x2="21" y2="6"/>
+                            <line x1="3" y1="18" x2="21" y2="18"/>
+                        </svg>
+                    </button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Testimonials Page Content -->
+        <div class="testimonials-page">
+            <!-- Hero Section -->
+            <section class="testimonials-hero">
+                <div class="container">
+                    <h1 class="heading-1 animate-fadeInUp">Ce que disent nos membres</h1>
+                    <p class="body-large animate-fadeInUp animate-delay-200">
+                        Découvrez les témoignages de ceux qui ont transformé leur vie chez FitZone
+                    </p>
+                    <button class="btn-primary btn-large" id="show-form-btn" style="margin-top: 20px;">
+                        <span id="form-btn-text">✍️ Laisser un avis</span>
+                    </button>
+                </div>
+            </section>
+
+            <!-- Review Form -->
+            <section class="review-form-section" id="review-form-section" style="display: none;">
+                <div class="container">
+                    <div class="review-form-card network-card">
+                        <h2 class="heading-2">Partagez votre expérience</h2>
+                        <p class="body-medium">Votre avis nous aide à nous améliorer</p>
+
+                        <form id="testimonials-form" class="review-form" onsubmit="handleTestimonialsSubmit(event)">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="testimonial-name">Votre nom *</label>
+                                    <input type="text" id="testimonial-name" name="name" required placeholder="Jean Dupont">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="testimonial-email">Email *</label>
+                                    <input type="email" id="testimonial-email" name="email" required placeholder="jean@example.com">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="testimonial-program">Programme suivi *</label>
+                                <select id="testimonial-program" name="program" required>
+                                    <option value="">Sélectionnez un programme</option>
+                                    <option value="Musculation">Musculation</option>
+                                    <option value="Crossfit">Crossfit</option>
+                                    <option value="Yoga & Pilates">Yoga & Pilates</option>
+                                    <option value="HIIT & Cardio">HIIT & Cardio</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Votre note *</label>
+                                <div class="rating-selector" id="rating-selector">
+                                    <!-- Stars will be populated by JavaScript -->
+                                </div>
+                                <input type="hidden" id="rating" name="rating" value="5">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="testimonial-comment">Votre commentaire *</label>
+                                <textarea id="testimonial-comment" name="comment" required rows="5" placeholder="Partagez votre expérience avec FitZone Gym..." minlength="10"></textarea>
+                            </div>
+
+                            <button type="submit" class="btn-primary btn-submit" id="testimonial-submit-btn">Publier mon avis</button>
+
+                            <div class="submit-message" id="testimonial-message" style="display: none;"></div>
+                        </form>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Testimonials Grid -->
+            <section class="testimonials-section">
+                <div class="container">
+                    <div class="testimonials-count" id="testimonials-count">
+                        <p class="body-large"></p>
+                    </div>
+                    <div class="testimonials-grid" id="testimonials-grid">
+                        <!-- Testimonials will be populated by JavaScript -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Stats Section -->
+            <section class="testimonials-stats">
+                <div class="container">
+                    <div class="stats-content">
+                        <div class="stat-item">
+                            <h2 class="stat-number display-medium">4.9/5</h2>
+                            <p class="body-large">Note moyenne</p>
+                        </div>
+                        <div class="stat-item">
+                            <h2 class="stat-number display-medium" id="testimonials-count-number">5+</h2>
+                            <p class="body-large">Avis positifs</p>
+                        </div>
+                        <div class="stat-item">
+                            <h2 class="stat-number display-medium">95%</h2>
+                            <p class="body-large">Taux de satisfaction</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA Section -->
+            <section class="testimonials-cta">
+                <div class="container">
+                    <div class="cta-box">
+                        <h2 class="heading-2">À votre tour de réussir !</h2>
+                        <p class="body-large">
+                            Rejoignez notre communauté et commencez votre transformation aujourd'hui
+                        </p>
+                        <a href="contact.html" class="btn-primary btn-large">Commencer maintenant</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer class="gym-footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <div class="footer-logo">
+                            <img src="images/RAINA_RITNESS_LOGO.png" alt="FitZone Gym Logo">
+                            <span>RAINA FITNESS CENTER</span>
+                        </div>
+                        <p class="footer-tagline">Transformez votre corps, transformez votre vie</p>
+                        <div class="social-links">
+                            <a href="https://facebook.com/fitzonegym" class="social-link" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                                </svg>
+                            </a>
+                            <a href="https://instagram.com/fitzonegym" class="social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                                </svg>
+                            </a>
+                            <a href="https://tiktok.com/@fitzonegym" class="social-link" aria-label="TikTok" target="_blank" rel="noopener noreferrer">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.9-.32-1.98-.23-2.81.36-.54.38-.89.98-1.02 1.64-.3 1.64.9 3.35 2.5 3.59.84.1 1.7-.13 2.37-.67.51-.41.83-.98.94-1.63.13-2.87.05-5.74.05-8.62v-9.15z"/>
+                                </svg>
+                            </a>
+                            <a href="https://youtube.com/@fitzonegym" class="social-link" aria-label="Youtube" target="_blank" rel="noopener noreferrer">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4 class="footer-title">Navigation</h4>
+                        <ul class="footer-links">
+                            <li><a href="index.html">Accueil</a></li>
+                            <li><a href="about.html">À propos</a></li>
+                            <li><a href="programs.html">Programmes</a></li>
+                            <li><a href="store.html">Store</a></li>
+                            <li><a href="testimonials.html">Témoignages</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4 class="footer-title">Nos Programmes</h4>
+                        <ul class="footer-links">
+                            <li><a href="programs.html">Musculation</a></li>
+                            <li><a href="programs.html">Crossfit</a></li>
+                            <li><a href="programs.html">Yoga & Pilates</a></li>
+                            <li><a href="programs.html">HIIT & Cardio</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4 class="footer-title">Contact</h4>
+                        <ul class="footer-contact">
+                            <li>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                    <circle cx="12" cy="10" r="3"/>
+                                </svg>
+                                <span>123 Avenue des Sports, 75015 Paris, France</span>
+                            </li>
+                            <li>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                                </svg>
+                                <span>+33 6 12 34 56 78</span>
+                            </li>
+                            <li>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                    <polyline points="22,6 12,13 2,6"/>
+                                </svg>
+                                <span>contact@fitzonegym.com</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="footer-bottom">
+                    <p>&copy; 2025 FitZone Gym. Tous droits réservés.</p>
+                    <div class="footer-bottom-links">
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Embedded Testimonials Data -->
+    <script>
+        const testimonialsData = [
+            {
+                id: 1,
+                name: "Julie Moreau",
+                rating: 5,
+                comment: "FitZone a transformé ma vie ! L'équipe est incroyable, les coachs sont à l'écoute et les résultats sont au rendez-vous. J'ai perdu 15kg en 6 mois !",
+                date: "2025-01-15",
+                program: "HIIT & Cardio"
+            },
+            {
+                id: 2,
+                name: "Pierre Dupont",
+                rating: 5,
+                comment: "Meilleure salle de sport de Paris ! Les équipements sont top, l'ambiance est motivante et les cours de Crossfit sont exceptionnels.",
+                date: "2025-01-10",
+                program: "Crossfit"
+            },
+            {
+                id: 3,
+                name: "Marie Leclerc",
+                rating: 5,
+                comment: "Je recommande à 100% ! Les cours de Yoga m'ont aidée à gérer mon stress et à améliorer ma posture. Sophie est une coach formidable.",
+                date: "2024-12-20",
+                program: "Yoga & Pilates"
+            },
+            {
+                id: 4,
+                name: "Alexandre Bernard",
+                rating: 5,
+                comment: "Excellent rapport qualité-prix. Les programmes sont variés et adaptés à tous les niveaux. J'ai pris 8kg de muscle en 4 mois !",
+                date: "2024-12-15",
+                program: "Musculation"
+            },
+            {
+                id: 5,
+                name: "Camille Rousseau",
+                rating: 5,
+                comment: "Une vraie communauté ! On se sent soutenu et encouragé. Les résultats sont impressionnants et l'atmosphère est conviviale.",
+                date: "2024-12-05",
+                program: "Crossfit"
+            }
+        ];
+
+        let currentRating = 5;
+        let showForm = false;
+
+        function renderStars(rating, interactive = false) {
+            let html = '';
+            for (let i = 0; i < 5; i++) {
+                const filled = i < rating ? 'currentColor' : 'none';
+                const clickHandler = interactive ? `onclick="setRating(${i + 1})"` : '';
+                const style = interactive ? 'style="cursor: pointer; color: #FFB800; transition: transform 0.2s ease;"' : 'style="color: var(--brand-primary);"';
+                html += `
+                    <svg width="${interactive ? 24 : 18}" height="${interactive ? 24 : 18}" viewBox="0 0 24 24" fill="${filled}" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="star-icon" ${clickHandler} ${style}>
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                    </svg>
+                `;
+            }
+            return html;
+        }
+
+        function setRating(rating) {
+            currentRating = rating;
+            document.getElementById('rating').value = rating;
+            document.getElementById('rating-selector').innerHTML = renderStars(rating, true) + `<span class="rating-text">(${rating}/5)</span>`;
+        }
+
+        function renderTestimonials() {
+            const testimonialsGrid = document.getElementById('testimonials-grid');
+            const testimonialsCount = document.getElementById('testimonials-count');
+            const countNumber = document.getElementById('testimonials-count-number');
+
+            if (!testimonialsGrid) return;
+
+            testimonialsCount.querySelector('p').textContent = `${testimonialsData.length} avis de nos membres`;
+            countNumber.textContent = `${testimonialsData.length}+`;
+
+            testimonialsGrid.innerHTML = '';
+
+            testimonialsData.forEach((testimonial, index) => {
+                const testimonialCard = document.createElement('div');
+                testimonialCard.className = 'testimonial-card network-card animate-fadeInUp';
+                testimonialCard.style.animationDelay = `${index * 0.1}s`;
+
+                const date = new Date(testimonial.date).toLocaleDateString('fr-FR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+
+                testimonialCard.innerHTML = `
+                    <div class="testimonial-header">
+                        <div class="testimonial-avatar">${testimonial.name.charAt(0)}</div>
+                        <div class="testimonial-info">
+                            <h3 class="heading-3">${testimonial.name}</h3>
+                            <span class="program-tag">${testimonial.program}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="testimonial-rating">
+                        ${renderStars(testimonial.rating)}
+                    </div>
+
+                    <p class="body-medium testimonial-comment">
+                        "${testimonial.comment}"
+                    </p>
+
+                    <div class="testimonial-date">${date}</div>
+                `;
+
+                testimonialsGrid.appendChild(testimonialCard);
+            });
+        }
+
+        function toggleForm() {
+            showForm = !showForm;
+            const formSection = document.getElementById('review-form-section');
+            const btnText = document.getElementById('form-btn-text');
+
+            if (showForm) {
+                formSection.style.display = 'block';
+                btnText.textContent = 'Voir les avis';
+            } else {
+                formSection.style.display = 'none';
+                btnText.textContent = '✍️ Laisser un avis';
+            }
+        }
+
+        function handleTestimonialsSubmit(event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const messageDiv = document.getElementById('testimonial-message');
+            const submitBtn = document.getElementById('testimonial-submit-btn');
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Envoi en cours...';
+
+            // Simulate submission (standalone version - no backend)
+            setTimeout(() => {
+                messageDiv.textContent = '✅ Merci pour votre avis ! Il sera publié après modération.';
+                messageDiv.style.background = '#d4edda';
+                messageDiv.style.color = '#155724';
+                messageDiv.style.display = 'block';
+
+                form.reset();
+                currentRating = 5;
+                setRating(5);
+                toggleForm();
+
+                setTimeout(() => {
+                    messageDiv.style.display = 'none';
+                }, 5000);
+
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Publier mon avis';
+            }, 1000);
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            renderTestimonials();
+
+            // Initialize rating selector
+            document.getElementById('rating-selector').innerHTML = renderStars(5, true) + '<span class="rating-text">(5/5)</span>';
+
+            // Form toggle button
+            document.getElementById('show-form-btn').addEventListener('click', toggleForm);
+        });
+    </script>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>

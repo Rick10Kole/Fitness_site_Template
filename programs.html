@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Découvrez nos programmes fitness: Musculation, Crossfit, Yoga & Pilates, HIIT & Cardio. Adaptés à tous les niveaux.">
+    <title>Nos Programmes - FitZone Gym</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="App">
+        <!-- Header -->
+        <header class="network-header">
+            <div class="container">
+                <nav class="nav-wrapper">
+                    <a href="index.html" class="network-logo">
+                        <img src="images/RAINA_RITNESS_LOGO.png" alt="FitZone Gym Logo">
+                        <span>RAINA FITNESS CENTER</span>
+                    </a>
+
+                    <div class="network-nav" id="network-nav" style="display: flex !important;">
+                        <a href="index.html" class="network-nav-link">Accueil</a>
+                        <a href="about.html" class="network-nav-link">À propos</a>
+                        <a href="programs.html" class="network-nav-link active">Programmes</a>
+                        <a href="store.html" class="network-nav-link">Store</a>
+                        <a href="testimonials.html" class="network-nav-link">Témoignages</a>
+                        <a href="contact.html" class="network-nav-link">Contact</a>
+                        <a href="contact.html" class="btn-cta-nav">Réserver</a>
+                    </div>
+
+                    <button class="mobile-menu-toggle" id="mobile-menu-toggle" aria-label="Toggle menu">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="3" y1="12" x2="21" y2="12"/>
+                            <line x1="3" y1="6" x2="21" y2="6"/>
+                            <line x1="3" y1="18" x2="21" y2="18"/>
+                        </svg>
+                    </button>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Programs Page Content -->
+        <div class="programs-page">
+            <!-- Hero Section -->
+            <section class="programs-hero">
+                <div class="container">
+                    <h1 class="heading-1 animate-fadeInUp">Nos Programmes</h1>
+                    <p class="body-large animate-fadeInUp animate-delay-200">
+                        Des programmes adaptés à tous les niveaux pour atteindre vos objectifs
+                    </p>
+                </div>
+            </section>
+
+            <!-- Programs Grid -->
+            <section class="programs-section">
+                <div class="container">
+                    <div class="programs-grid" id="programs-grid">
+                        <!-- Programs will be populated by JavaScript -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- CTA Section -->
+            <section class="programs-cta">
+                <div class="container">
+                    <div class="cta-content">
+                        <h2 class="heading-2">Pas sûr du programme qui vous convient ?</h2>
+                        <p class="body-large">Contactez-nous pour une consultation gratuite avec nos coachs</p>
+                        <a href="contact.html" class="btn-primary btn-large">Obtenir des conseils personnalisés</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer class="gym-footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <div class="footer-logo">
+                            <img src="images/RAINA_RITNESS_LOGO.png" alt="FitZone Gym Logo">
+                            <span>RAINA FITNESS CENTER</span>
+                        </div>
+                        <p class="footer-tagline">Transformez votre corps, transformez votre vie</p>
+                        <div class="social-links">
+                            <a href="https://facebook.com/fitzonegym" class="social-link" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                                </svg>
+                            </a>
+                            <a href="https://instagram.com/fitzonegym" class="social-link" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                                </svg>
+                            </a>
+                            <a href="https://tiktok.com/@fitzonegym" class="social-link" aria-label="TikTok" target="_blank" rel="noopener noreferrer">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.9-.32-1.98-.23-2.81.36-.54.38-.89.98-1.02 1.64-.3 1.64.9 3.35 2.5 3.59.84.1 1.7-.13 2.37-.67.51-.41.83-.98.94-1.63.13-2.87.05-5.74.05-8.62v-9.15z"/>
+                                </svg>
+                            </a>
+                            <a href="https://youtube.com/@fitzonegym" class="social-link" aria-label="Youtube" target="_blank" rel="noopener noreferrer">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4 class="footer-title">Navigation</h4>
+                        <ul class="footer-links">
+                            <li><a href="index.html">Accueil</a></li>
+                            <li><a href="about.html">À propos</a></li>
+                            <li><a href="programs.html">Programmes</a></li>
+                            <li><a href="store.html">Store</a></li>
+                            <li><a href="testimonials.html">Témoignages</a></li>
+                            <li><a href="contact.html">Contact</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4 class="footer-title">Nos Programmes</h4>
+                        <ul class="footer-links">
+                            <li><a href="programs.html">Musculation</a></li>
+                            <li><a href="programs.html">Crossfit</a></li>
+                            <li><a href="programs.html">Yoga & Pilates</a></li>
+                            <li><a href="programs.html">HIIT & Cardio</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4 class="footer-title">Contact</h4>
+                        <ul class="footer-contact">
+                            <li>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                    <circle cx="12" cy="10" r="3"/>
+                                </svg>
+                                <span>123 Avenue des Sports, 75015 Paris, France</span>
+                            </li>
+                            <li>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                                </svg>
+                                <span>+33 6 12 34 56 78</span>
+                            </li>
+                            <li>
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                                    <polyline points="22,6 12,13 2,6"/>
+                                </svg>
+                                <span>contact@fitzonegym.com</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="footer-bottom">
+                    <p>&copy; 2025 FitZone Gym. Tous droits réservés.</p>
+                    <div class="footer-bottom-links">
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Embedded Programs Data -->
+    <script>
+        const programsData = [
+            {
+                id: 1,
+                name: "Musculation",
+                description: "Développez votre masse musculaire avec nos programmes personnalisés et équipements de pointe.",
+                duration: "Sessions de 60-90 min",
+                level: "Tous niveaux",
+                schedule: "Lun-Ven: 6h-22h, Sam-Dim: 8h-20h",
+                price: "20.000 F/mois",
+                image: "https://images.unsplash.com/photo-1583454110551-21f2fa2afe61",
+                benefits: ["Gain de force", "Masse musculaire", "Métabolisme accru"]
+            },
+            {
+                id: 2,
+                name: "Crossfit",
+                description: "Entraînement fonctionnel intense combinant force, cardio et agilité.",
+                duration: "Sessions de 60 min",
+                level: "Intermédiaire à avancé",
+                schedule: "Lun-Sam: 7h, 12h, 18h",
+                price: "20.000 F/mois",
+                image: "https://images.unsplash.com/photo-1517836357463-d25dfeac3438",
+                benefits: ["Endurance", "Force explosive", "Communauté"]
+            },
+            {
+                id: 3,
+                name: "Yoga & Pilates",
+                description: "Améliorez votre souplesse, posture et bien-être mental avec nos cours guidés.",
+                duration: "Sessions de 60 min",
+                level: "Tous niveaux",
+                schedule: "Mar-Jeu: 9h, 18h30",
+                price: "20.000 F/mois",
+                image: "https://images.unsplash.com/photo-1534258936925-c58bed479fcb",
+                benefits: ["Souplesse", "Relaxation", "Posture"]
+            },
+            {
+                id: 4,
+                name: "HIIT & Cardio",
+                description: "Brûlez des calories et améliorez votre condition physique avec nos sessions haute intensité.",
+                duration: "Sessions de 45 min",
+                level: "Tous niveaux",
+                schedule: "Lun-Ven: 7h, 12h30, 19h",
+                price: "20.000 F/mois",
+                image: "https://images.unsplash.com/photo-1765728617805-b9f22d64e5b3",
+                benefits: ["Perte de poids", "Cardio", "Énergie"]
+            }
+        ];
+
+        function renderPrograms() {
+            const programsGrid = document.getElementById('programs-grid');
+            if (!programsGrid) return;
+
+            programsData.forEach((program, index) => {
+                const programCard = document.createElement('div');
+                programCard.className = 'program-card network-card animate-fadeInUp';
+                programCard.style.animationDelay = `${index * 0.15}s`;
+                programCard.id = program.name.toLowerCase().replace(/\s+/g, '-');
+
+                programCard.innerHTML = `
+                    <div class="program-image">
+                        <img src="${program.image}" alt="${program.name}" loading="lazy">
+                        <div class="program-price">${program.price}</div>
+                    </div>
+                    
+                    <div class="program-content">
+                        <h3 class="heading-3">${program.name}</h3>
+                        <p class="body-medium program-description">${program.description}</p>
+                        
+                        <div class="program-details">
+                            <div class="program-detail-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <polyline points="12 6 12 12 16 14"/>
+                                </svg>
+                                <span>${program.duration}</span>
+                            </div>
+                            <div class="program-detail-item">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="9" cy="7" r="4"/>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                </svg>
+                                <span>${program.level}</span>
+                            </div>
+                        </div>
+
+                        <div class="program-schedule">
+                            <strong>Horaires:</strong>
+                            <p>${program.schedule}</p>
+                        </div>
+
+                        <div class="program-benefits">
+                            <strong>Bénéfices:</strong>
+                            <div class="benefits-list">
+                                ${program.benefits.map(benefit => `
+                                    <span class="benefit-badge">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                            <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                                            <polyline points="17 6 23 6 23 12"/>
+                                        </svg>
+                                        ${benefit}
+                                    </span>
+                                `).join('')}
+                            </div>
+                        </div>
+
+                        <a href="contact.html" class="btn-primary btn-full">
+                            Réserver ce cours
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle;">
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                                <polyline points="12 5 19 12 12 19"/>
+                            </svg>
+                        </a>
+                    </div>
+                `;
+
+                programsGrid.appendChild(programCard);
+            });
+        }
+
+        // Initialize programs on page load
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', renderPrograms);
+        } else {
+            renderPrograms();
+        }
+    </script>
+
+    <script src="js/main.js"></script>
+</body>
+
+</html>

@@ -1376,6 +1376,7 @@ programs-cta .btn-primary {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-large);
+   order: 2;
 }
 
 .info-card {
@@ -1412,6 +1413,7 @@ programs-cta .btn-primary {
 .map-container {
   padding: 0;
   overflow: hidden;
+   order: 3:
 }
 
 .map-container iframe {
@@ -1939,6 +1941,7 @@ programs-cta .btn-primary {
   }
 
 }
+
 
 
 

@@ -1315,7 +1315,7 @@ programs-cta .btn-primary {
 
   .map-container {
     order: 3;
-    width: 80%;
+    width: 100%;
     margin: 0 auto; 
 }
 
@@ -1952,6 +1952,7 @@ programs-cta .btn-primary {
   }
 
 }
+
 
 
 

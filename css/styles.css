@@ -1306,6 +1306,7 @@ programs-cta .btn-primary {
 
 .contact-form-section {
   max-height: 40px !important;
+   order: 1
 }
 
 .form-header {
@@ -1941,6 +1942,7 @@ programs-cta .btn-primary {
   }
 
 }
+
 
 
 

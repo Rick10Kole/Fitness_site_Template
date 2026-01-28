@@ -339,7 +339,7 @@ body {
   text-decoration: none;
   font-size: 15px;
   font-weight: 500;
-  padding: 5px 20px;
+  padding: 5px 15px;
   border-radius: 20px;
   transition: all 0.2s ease;
 }
@@ -1951,6 +1951,7 @@ programs-cta .btn-primary {
   }
 
 }
+
 
 
 

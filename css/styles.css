@@ -1297,16 +1297,25 @@ programs-cta .btn-primary {
 .contact-content {
   padding: var(--spacing-giant) 0;
 }
-
 .contact-grid {
-  display: grid;
-  grid-template-columns: 1.5fr 1fr;
-  gap: var(--spacing-xl);
-}
+   display: flex;
+   flex-direction: column;
+   gap: var(--spacing-large);
+  }
 
 .contact-form-section {
-  max-height: 40px;
-   order: 1
+    order: 1;
+    width: 100%;
+  }
+
+  .contact-info-section {
+    order: 2;
+    width: 100%;
+  }
+
+  .map-container {
+    order: 3;
+    width: 100%;
 }
 
 .form-header {
@@ -1942,6 +1951,7 @@ programs-cta .btn-primary {
   }
 
 }
+
 
 
 

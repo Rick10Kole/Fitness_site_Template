@@ -1305,7 +1305,7 @@ programs-cta .btn-primary {
 }
 
 .contact-form-section {
-  max-height: 40px !important;
+  max-height: 40px;
    order: 1
 }
 
@@ -1942,6 +1942,7 @@ programs-cta .btn-primary {
   }
 
 }
+
 
 
 

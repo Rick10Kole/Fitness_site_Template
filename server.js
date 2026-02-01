@@ -1,94 +1,84 @@
 const express = require('express');
-const fs = require('fs');
-const path = require('path');
+const mongoose = require('mongoose');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 const PORT = 3000;
-const REVIEWS_FILE = path.join(__dirname, 'reviews.json');
 
-// Configuration CORS très permissive pour éviter les blocages
-app.use(cors({
-    origin: '*',
-    methods: ['GET', 'POST'],
-    allowedHeaders: ['Content-Type']
-}));
+/**
+ * CONFIGURATION MONGODB
+ * Remplacez la chaîne ci-dessous par votre propre chaîne de connexion MongoDB Atlas
+ * Exemple : "mongodb+srv://utilisateur:motdepasse@cluster.mongodb.net/fitzone"
+ */
+const MONGODB_URI = "mongodb+srv://ricardobankole530_db_user:UGvPRsOUiylY7Dem@cluster0.vpdh6oa.mongodb.net/?appName=Cluster0";
 
+// Middleware
+app.use(cors());
 app.use(express.json());
 app.use(express.static(__dirname));
 
-// Middleware de log pour voir chaque requête entrante
-app.use((req, res, next) => {
-    console.log(`[${new Date().toLocaleTimeString()}] ${req.method} ${req.url}`);
-    next();
+// Connexion à MongoDB
+if (MONGODB_URI !== "VOTRE_CHAINE_DE_CONNEXION_ICI") {
+    mongoose.connect(MONGODB_URI)
+        .then(() => console.log('✅ Connecté avec succès à MongoDB'))
+        .catch(err => console.error('❌ Erreur de connexion MongoDB:', err));
+} else {
+    console.warn('⚠️ ATTENTION : La chaîne de connexion MongoDB n\'est pas encore configurée dans server.js');
+}
+
+// Modèle de données pour les avis (Schema)
+const reviewSchema = new mongoose.Schema({
+    name: { type: String, required: true },
+    rating: { type: Number, required: true, min: 1, max: 5 },
+    comment: { type: String, required: true },
+    program: { type: String, default: 'Général' },
+    date: { type: String, default: () => new Date().toISOString().split('T')[0] }
+}, { timestamps: true });
+
+const Review = mongoose.model('Review', reviewSchema);
+
+// ROUTES API
+
+// 1. Récupérer tous les avis
+app.get('/api/reviews', async (req, res) => {
+    try {
+        const reviews = await Review.find().sort({ createdAt: -1 }); // Les plus récents en premier
+        res.json(reviews);
+    } catch (err) {
+        res.status(500).json({ error: 'Erreur lors de la récupération des avis' });
+    }
 });
 
-const readReviews = () => {
-    try {
-        if (!fs.existsSync(REVIEWS_FILE)) {
-            console.log("Fichier reviews.json inexistant, création...");
-            fs.writeFileSync(REVIEWS_FILE, '[]', 'utf8');
-            return [];
-        }
-        const data = fs.readFileSync(REVIEWS_FILE, 'utf8');
-        return JSON.parse(data || '[]');
-    } catch (err) {
-        console.error('ERREUR LECTURE:', err.message);
-        return [];
-    }
-};
-
-const writeReviews = (reviews) => {
-    try {
-        fs.writeFileSync(REVIEWS_FILE, JSON.stringify(reviews, null, 4), 'utf8');
-        return true;
-    } catch (err) {
-        console.error('ERREUR ÉCRITURE:', err.message);
-        return false;
-    }
-};
-
-app.get('/api/reviews', (req, res) => {
-    const reviews = readReviews();
-    res.json(reviews);
-});
-
-app.post('/api/reviews', (req, res) => {
+// 2. Ajouter un nouvel avis
+app.post('/api/reviews', async (req, res) => {
     try {
         const { name, rating, comment, program, date } = req.body;
 
         if (!name || !rating || !comment) {
-            console.log("Validation échouée: champs manquants");
-            return res.status(400).json({ error: 'Champs obligatoires manquants' });
+            return res.status(400).json({ error: 'Veuillez remplir tous les champs obligatoires' });
         }
 
-        const reviews = readReviews();
-        const newReview = {
-            id: Date.now(),
+        const newReview = new Review({
             name,
-            rating: parseInt(rating),
+            rating,
             comment,
-            program: program || 'Général',
-            date: date || new Date().toISOString().split('T')[0]
-        };
+            program,
+            date
+        });
 
-        reviews.unshift(newReview);
-        
-        if (writeReviews(reviews)) {
-            console.log(`Succès: Avis de ${name} enregistré.`);
-            res.status(201).json(newReview);
-        } else {
-            res.status(500).json({ error: 'Impossible d\'écrire sur le disque' });
-        }
+        const savedReview = await newReview.save();
+        res.status(201).json(savedReview);
     } catch (err) {
-        console.error('ERREUR CRITIQUE POST:', err.message);
-        res.status(500).json({ error: err.message });
+        console.error('Erreur lors de l\'enregistrement:', err);
+        res.status(500).json({ error: 'Erreur serveur lors de la sauvegarde de l\'avis' });
     }
 });
 
+// Lancement du serveur
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`==========================================`);
-    console.log(`SERVEUR FITZONE OPÉRATIONNEL`);
-    console.log(`URL locale : http://localhost:${PORT}`);
+    console.log(`SERVEUR FITZONE PRÊT POUR MONGODB`);
+    console.log(`URL : http://localhost:${PORT}`);
     console.log(`==========================================`);
 });

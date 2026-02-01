@@ -1,0 +1,42 @@
+[
+    {
+        "id": 1,
+        "name": "Julie Moreau",
+        "rating": 5,
+        "comment": "FitZone a transformé ma vie ! L'équipe est incroyable, les coachs sont à l'écoute et les résultats sont au rendez-vous. J'ai perdu 15kg en 6 mois !",
+        "date": "2025-01-15",
+        "program": "HIIT & Cardio"
+    },
+    {
+        "id": 2,
+        "name": "Pierre Dupont",
+        "rating": 5,
+        "comment": "Meilleure salle de sport de Paris ! Les équipements sont top, l'ambiance est motivante et les cours de Crossfit sont exceptionnels.",
+        "date": "2025-01-10",
+        "program": "Crossfit"
+    },
+    {
+        "id": 3,
+        "name": "Marie Leclerc",
+        "rating": 5,
+        "comment": "Je recommande à 100% ! Les cours de Yoga m'ont aidée à gérer mon stress et à améliorer ma posture. Sophie est une coach formidable.",
+        "date": "2024-12-20",
+        "program": "Yoga & Pilates"
+    },
+    {
+        "id": 4,
+        "name": "Alexandre Bernard",
+        "rating": 5,
+        "comment": "Excellent rapport qualité-prix. Les programmes sont variés et adaptés à tous les niveaux. J'ai pris 8kg de muscle en 4 mois !",
+        "date": "2024-12-15",
+        "program": "Musculation"
+    },
+    {
+        "id": 5,
+        "name": "Camille Rousseau",
+        "rating": 5,
+        "comment": "Une vraie communauté ! On se sent soutenu et encouragé. Les résultats sont impressionnants et l'atmosphère est conviviale.",
+        "date": "2024-12-05",
+        "program": "Crossfit"
+    }
+]

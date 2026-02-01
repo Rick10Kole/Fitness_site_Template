@@ -6,6 +6,16 @@
     <meta name="description" content="Découvrez les témoignages de nos membres. Partagez votre expérience avec FitZone Gym.">
     <title>Témoignages - FitZone Gym</title>
     <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .view-more-container {
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 20px;
+        }
+        .hidden-testimonial {
+            display: none !important;
+        }
+    </style>
 </head>
 <body>
     <div class="App">
@@ -115,6 +125,9 @@
                     <div class="testimonials-grid" id="testimonials-grid">
                         <!-- Testimonials will be populated by JavaScript -->
                     </div>
+                    <div id="view-more-container" class="view-more-container" style="display: none;">
+                        <button id="view-more-btn" class="btn-primary" onclick="showAllTestimonials()">Voir plus</button>
+                    </div>
                 </div>
             </section>
 
@@ -123,7 +136,7 @@
                 <div class="container">
                     <div class="stats-content">
                         <div class="stat-item">
-                            <h2 class="stat-number display-medium">4.9/5</h2>
+                            <h2 class="stat-number display-medium" id="avg-rating">4.9/5</h2>
                             <p class="body-large">Note moyenne</p>
                         </div>
                         <div class="stat-item">
@@ -131,7 +144,7 @@
                             <p class="body-large">Avis positifs</p>
                         </div>
                         <div class="stat-item">
-                            <h2 class="stat-number display-medium">95%</h2>
+                            <h2 class="stat-number display-medium" id="satisfaction-rate">95%</h2>
                             <p class="body-large">Taux de satisfaction</p>
                         </div>
                     </div>
@@ -293,6 +306,7 @@
 
         let currentRating = 5;
         let showForm = false;
+        let allVisible = false;
 
         function renderStars(rating, interactive = false) {
             let html = '';
@@ -315,15 +329,37 @@
             document.getElementById('rating-selector').innerHTML = renderStars(rating, true) + `<span class="rating-text">(${rating}/5)</span>`;
         }
 
+        function updateStats() {
+            const avgRatingEl = document.getElementById('avg-rating');
+            const satisfactionRateEl = document.getElementById('satisfaction-rate');
+            const countNumber = document.getElementById('testimonials-count-number');
+            const testimonialsCountText = document.getElementById('testimonials-count').querySelector('p');
+
+            if (testimonialsData.length === 0) return;
+
+            // Calcul de la moyenne
+            const totalRating = testimonialsData.reduce((acc, curr) => acc + curr.rating, 0);
+            const avgRating = (totalRating / testimonialsData.length).toFixed(1);
+            
+            // Calcul du taux de satisfaction (avis >= 4 étoiles)
+            const positiveReviews = testimonialsData.filter(t => t.rating >= 4).length;
+            const satisfactionRate = Math.round((positiveReviews / testimonialsData.length) * 100);
+
+            // Mise à jour de l'affichage
+            avgRatingEl.textContent = `${avgRating}/5`;
+            satisfactionRateEl.textContent = `${satisfactionRate}%`;
+            countNumber.textContent = `${testimonialsData.length}+`;
+            testimonialsCountText.textContent = `${testimonialsData.length} avis de nos membres`;
+        }
+
         function renderTestimonials() {
             const testimonialsGrid = document.getElementById('testimonials-grid');
-            const testimonialsCount = document.getElementById('testimonials-count');
-            const countNumber = document.getElementById('testimonials-count-number');
+            const viewMoreContainer = document.getElementById('view-more-container');
 
             if (!testimonialsGrid) return;
 
-            testimonialsCount.querySelector('p').textContent = `${testimonialsData.length} avis de nos membres`;
-            countNumber.textContent = `${testimonialsData.length}+`;
+            // Mettre à jour les statistiques avant de rendre
+            updateStats();
 
             testimonialsGrid.innerHTML = '';
 
@@ -331,6 +367,11 @@
                 const testimonialCard = document.createElement('div');
                 testimonialCard.className = 'testimonial-card network-card animate-fadeInUp';
                 testimonialCard.style.animationDelay = `${index * 0.1}s`;
+                
+                // Cacher les avis après le 8ème si allVisible est faux
+                if (!allVisible && index >= 8) {
+                    testimonialCard.classList.add('hidden-testimonial');
+                }
 
                 const date = new Date(testimonial.date).toLocaleDateString('fr-FR', {
                     year: 'numeric',
@@ -360,6 +401,18 @@
 
                 testimonialsGrid.appendChild(testimonialCard);
             });
+
+            // Afficher ou cacher le bouton "Voir plus"
+            if (testimonialsData.length > 8 && !allVisible) {
+                viewMoreContainer.style.display = 'block';
+            } else {
+                viewMoreContainer.style.display = 'none';
+            }
+        }
+
+        function showAllTestimonials() {
+            allVisible = true;
+            renderTestimonials();
         }
 
         function toggleForm() {
@@ -383,12 +436,25 @@
             const messageDiv = document.getElementById('testimonial-message');
             const submitBtn = document.getElementById('testimonial-submit-btn');
 
+            const formData = new FormData(form);
+            const newTestimonial = {
+                id: testimonialsData.length + 1,
+                name: formData.get('name'),
+                rating: parseInt(formData.get('rating')),
+                comment: formData.get('comment'),
+                program: formData.get('program'),
+                date: new Date().toISOString().split('T')[0]
+            };
+
             submitBtn.disabled = true;
             submitBtn.textContent = 'Envoi en cours...';
 
-            // Simulate submission (standalone version - no backend)
+            // Simulation de l'envoi et ajout immédiat
             setTimeout(() => {
-                messageDiv.textContent = '✅ Merci pour votre avis ! Il sera publié après modération.';
+                // Ajouter le nouvel avis au début de la liste
+                testimonialsData.unshift(newTestimonial);
+                
+                messageDiv.textContent = '✅ Merci ! Votre avis a été publié avec succès.';
                 messageDiv.style.background = '#d4edda';
                 messageDiv.style.color = '#155724';
                 messageDiv.style.display = 'block';
@@ -396,15 +462,19 @@
                 form.reset();
                 currentRating = 5;
                 setRating(5);
-                toggleForm();
-
+                
+                // Re-rendre les avis et recalculer les stats
+                renderTestimonials();
+                
+                // Fermer le formulaire après un court délai
                 setTimeout(() => {
+                    toggleForm();
                     messageDiv.style.display = 'none';
-                }, 5000);
+                }, 1500);
 
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Publier mon avis';
-            }, 1000);
+            }, 800);
         }
 
         // Initialize page

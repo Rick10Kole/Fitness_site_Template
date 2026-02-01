@@ -1,17 +1,18 @@
+require('dotenv').config(); // Charge les variables du fichier .env
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 /**
  * CONFIGURATION MONGODB
- * Remplacez la chaîne ci-dessous par votre propre chaîne de connexion MongoDB Atlas
- * Exemple : "mongodb+srv://utilisateur:motdepasse@cluster.mongodb.net/fitzone"
+ * La chaîne de connexion est maintenant lue depuis le fichier .env
+ * pour éviter les fuites de sécurité (Public Leaked Secret).
  */
-const MONGODB_URI = "mongodb+srv://ricardobankole530_db_user:UGvPRsOUiylY7Dem@cluster0.vpdh6oa.mongodb.net/?appName=Cluster0";
+const MONGODB_URI = process.env.MONGODB_URI;
 
 // Middleware
 app.use(cors());
@@ -19,12 +20,13 @@ app.use(express.json());
 app.use(express.static(__dirname));
 
 // Connexion à MongoDB
-if (MONGODB_URI !== "VOTRE_CHAINE_DE_CONNEXION_ICI") {
+if (MONGODB_URI) {
     mongoose.connect(MONGODB_URI)
         .then(() => console.log('✅ Connecté avec succès à MongoDB'))
-        .catch(err => console.error('❌ Erreur de connexion MongoDB:', err));
+        .catch(err => console.error('❌ Erreur de connexion MongoDB:', err.message));
 } else {
-    console.warn('⚠️ ATTENTION : La chaîne de connexion MongoDB n\'est pas encore configurée dans server.js');
+    console.error('❌ ERREUR CRITIQUE : MONGODB_URI n\'est pas défini dans le fichier .env');
+    console.log('Veuillez créer un fichier .env et y ajouter : MONGODB_URI=votre_lien_mongodb');
 }
 
 // Modèle de données pour les avis (Schema)
@@ -43,7 +45,7 @@ const Review = mongoose.model('Review', reviewSchema);
 // 1. Récupérer tous les avis
 app.get('/api/reviews', async (req, res) => {
     try {
-        const reviews = await Review.find().sort({ createdAt: -1 }); // Les plus récents en premier
+        const reviews = await Review.find().sort({ createdAt: -1 });
         res.json(reviews);
     } catch (err) {
         res.status(500).json({ error: 'Erreur lors de la récupération des avis' });
@@ -78,7 +80,7 @@ app.post('/api/reviews', async (req, res) => {
 // Lancement du serveur
 app.listen(PORT, '0.0.0.0', () => {
     console.log(`==========================================`);
-    console.log(`SERVEUR FITZONE PRÊT POUR MONGODB`);
-    console.log(`URL : http://localhost:${PORT}`);
+    console.log(`SERVEUR FITZONE SÉCURISÉ LANCÉ`);
+    console.log(`Port : ${PORT}`);
     console.log(`==========================================`);
 });

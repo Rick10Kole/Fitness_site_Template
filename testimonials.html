@@ -115,27 +115,43 @@
     </div>
 
     <script>
-        // On utilise le chemin relatif pour que ça marche via le serveur
         const API_URL = "/api/reviews";
         
+        // Avis initiaux qui s'affichent TOUJOURS
+        const INITIAL_REVIEWS = [
+            { id: 1, name: "Julie Moreau", rating: 5, comment: "FitZone a transformé ma vie ! L'équipe est incroyable, les coachs sont à l'écoute et les résultats sont au rendez-vous.", date: "2025-01-15", program: "HIIT & Cardio" },
+            { id: 2, name: "Pierre Dupont", rating: 5, comment: "Meilleure salle de sport de Paris ! Les équipements sont top, l'ambiance est motivante.", date: "2025-01-10", program: "Crossfit" },
+            { id: 3, name: "Marie Leclerc", rating: 5, comment: "Je recommande à 100% ! Les cours de Yoga m'ont aidée à gérer mon stress.", date: "2024-12-20", program: "Yoga & Pilates" },
+            { id: 4, name: "Alexandre Bernard", rating: 5, comment: "Excellent rapport qualité-prix. J'ai pris 8kg de muscle en 4 mois !", date: "2024-12-15", program: "Musculation" },
+            { id: 5, name: "Camille Rousseau", rating: 5, comment: "Une vraie communauté ! On se sent soutenu et encouragé.", date: "2024-12-05", program: "Crossfit" }
+        ];
+
         let testimonialsData = [];
         let showForm = false;
         let allVisible = false;
 
         async function fetchReviews() {
+            // 1. Charger les avis initiaux par défaut
+            testimonialsData = [...INITIAL_REVIEWS];
+            
+            // 2. Tenter de charger les avis depuis le serveur
             try {
                 const response = await fetch(API_URL);
-                if (!response.ok) throw new Error("Erreur serveur");
-                testimonialsData = await response.json();
-                renderTestimonials();
+                if (response.ok) {
+                    const serverReviews = await response.json();
+                    // Fusionner en évitant les doublons d'IDs initiaux
+                    const serverOnly = serverReviews.filter(sr => !INITIAL_REVIEWS.find(ir => ir.id === sr.id));
+                    testimonialsData = [...serverOnly, ...INITIAL_REVIEWS];
+                    console.log("Avis chargés depuis le serveur.");
+                }
             } catch (error) {
-                console.error('Fetch error:', error);
-                document.getElementById('testimonials-grid').innerHTML = 
-                    `<p style="text-align:center; grid-column: 1/-1; padding: 20px; background: #f8d7da; color: #721c24; border-radius: 8px;">
-                        <strong>Le serveur n'est pas lancé.</strong><br>
-                        Lancez "node server.js" et ouvrez http://localhost:3000/testimonials.html
-                    </p>`;
+                console.log("Serveur non détecté, utilisation du stockage local.");
+                // 3. Si pas de serveur, charger depuis le localStorage
+                const localReviews = JSON.parse(localStorage.getItem('fitzone_custom_reviews')) || [];
+                testimonialsData = [...localReviews, ...INITIAL_REVIEWS];
             }
+            
+            renderTestimonials();
         }
 
         function renderStars(rating, interactive = false) {
@@ -207,6 +223,7 @@
             const formData = new FormData(form);
 
             const data = {
+                id: Date.now(),
                 name: formData.get('name'),
                 rating: parseInt(formData.get('rating')),
                 comment: formData.get('comment'),
@@ -215,41 +232,46 @@
             };
 
             btn.disabled = true;
-            btn.textContent = 'Publication en cours...';
-            msg.style.display = 'none';
+            btn.textContent = 'Publication...';
 
+            // 1. Tenter d'envoyer au serveur
             try {
                 const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
                 });
-
-                if (!response.ok) throw new Error("Erreur serveur");
-
-                const result = await response.json();
-                testimonialsData.unshift(result);
                 
-                msg.innerHTML = '✅ Merci ! Votre avis a été enregistré et est maintenant visible par tous.';
-                msg.style.background = '#d4edda'; msg.style.color = '#155724';
-                msg.style.display = 'block';
-                
-                form.reset(); 
-                setRating(5); 
-                renderTestimonials();
-                
-                setTimeout(() => {
-                    toggleForm();
-                    msg.style.display = 'none';
-                }, 2500);
+                if (response.ok) {
+                    const result = await response.json();
+                    testimonialsData.unshift(result);
+                } else {
+                    throw new Error();
+                }
             } catch (error) {
-                msg.innerHTML = `❌ Erreur de publication. Le serveur est-il bien lancé ?`;
-                msg.style.background = '#f8d7da'; msg.style.color = '#721c24';
-                msg.style.display = 'block';
-            } finally {
-                btn.disabled = false;
-                btn.textContent = 'Publier mon avis';
+                // 2. Si échec serveur, sauvegarder localement
+                console.log("Sauvegarde locale uniquement.");
+                const localReviews = JSON.parse(localStorage.getItem('fitzone_custom_reviews')) || [];
+                localReviews.unshift(data);
+                localStorage.setItem('fitzone_custom_reviews', JSON.stringify(localReviews));
+                testimonialsData.unshift(data);
             }
+
+            msg.innerHTML = '✅ Merci ! Votre avis a été enregistré.';
+            msg.style.background = '#d4edda'; msg.style.color = '#155724';
+            msg.style.display = 'block';
+            
+            form.reset(); 
+            setRating(5); 
+            renderTestimonials();
+            
+            setTimeout(() => {
+                toggleForm();
+                msg.style.display = 'none';
+            }, 2000);
+            
+            btn.disabled = false;
+            btn.textContent = 'Publier mon avis';
         }
 
         document.addEventListener('DOMContentLoaded', () => {

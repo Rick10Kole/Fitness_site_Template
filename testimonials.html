@@ -261,22 +261,24 @@
 
     <!-- Embedded Testimonials Data -->
     <script>
-        const API_URL = '/api/reviews';
+        // Détection automatique de l'URL du serveur (pour fonctionner en local ou en ligne)
+        const API_URL = window.location.origin + '/api/reviews';
         let testimonialsData = [];
         let currentRating = 5;
         let showForm = false;
         let allVisible = false;
 
-        // Charger les avis depuis le serveur
         async function fetchReviews() {
+            console.log("Tentative de chargement des avis depuis:", API_URL);
             try {
                 const response = await fetch(API_URL);
-                if (!response.ok) throw new Error('Erreur réseau');
+                if (!response.ok) throw new Error(`Erreur serveur: ${response.status}`);
                 testimonialsData = await response.json();
+                console.log("Avis chargés:", testimonialsData.length);
                 renderTestimonials();
             } catch (error) {
-                console.error('Impossible de charger les avis:', error);
-                // Fallback si le serveur ne répond pas (données locales)
+                console.error('Échec fetch:', error.message);
+                // Utiliser les données locales si le serveur est injoignable
                 testimonialsData = JSON.parse(localStorage.getItem('fitzone_testimonials')) || [];
                 renderTestimonials();
             }
@@ -330,7 +332,6 @@
             if (!testimonialsGrid) return;
 
             updateStats();
-
             testimonialsGrid.innerHTML = '';
 
             testimonialsData.forEach((testimonial, index) => {
@@ -356,18 +357,10 @@
                             <span class="program-tag">${testimonial.program}</span>
                         </div>
                     </div>
-                    
-                    <div class="testimonial-rating">
-                        ${renderStars(testimonial.rating)}
-                    </div>
-
-                    <p class="body-medium testimonial-comment">
-                        "${testimonial.comment}"
-                    </p>
-
+                    <div class="testimonial-rating">${renderStars(testimonial.rating)}</div>
+                    <p class="body-medium testimonial-comment">"${testimonial.comment}"</p>
                     <div class="testimonial-date">${date}</div>
                 `;
-
                 testimonialsGrid.appendChild(testimonialCard);
             });
 
@@ -387,19 +380,12 @@
             showForm = !showForm;
             const formSection = document.getElementById('review-form-section');
             const btnText = document.getElementById('form-btn-text');
-
-            if (showForm) {
-                formSection.style.display = 'block';
-                btnText.textContent = 'Voir les avis';
-            } else {
-                formSection.style.display = 'none';
-                btnText.textContent = '✍️ Laisser un avis';
-            }
+            formSection.style.display = showForm ? 'block' : 'none';
+            btnText.textContent = showForm ? 'Voir les avis' : '✍️ Laisser un avis';
         }
 
         async function handleTestimonialsSubmit(event) {
             event.preventDefault();
-
             const form = event.target;
             const messageDiv = document.getElementById('testimonial-message');
             const submitBtn = document.getElementById('testimonial-submit-btn');
@@ -415,28 +401,35 @@
 
             submitBtn.disabled = true;
             submitBtn.textContent = 'Envoi en cours...';
+            messageDiv.style.display = 'none';
 
             try {
+                console.log("Envoi de l'avis au serveur...");
                 const response = await fetch(API_URL, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(newTestimonial)
                 });
 
-                if (!response.ok) throw new Error('Erreur lors de l\'envoi');
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`Serveur (${response.status}): ${errorText}`);
+                }
 
                 const savedReview = await response.json();
                 testimonialsData.unshift(savedReview);
                 
+                // Sauvegarder aussi localement en secours
+                localStorage.setItem('fitzone_testimonials', JSON.stringify(testimonialsData));
+
                 messageDiv.textContent = '✅ Merci ! Votre avis a été publié avec succès.';
+                messageDiv.className = 'submit-message success';
                 messageDiv.style.background = '#d4edda';
                 messageDiv.style.color = '#155724';
                 messageDiv.style.display = 'block';
 
                 form.reset();
-                currentRating = 5;
                 setRating(5);
-                
                 renderTestimonials();
                 
                 setTimeout(() => {
@@ -445,8 +438,9 @@
                 }, 1500);
 
             } catch (error) {
-                console.error('Erreur:', error);
-                messageDiv.textContent = '❌ Une erreur est survenue. Veuillez réessayer.';
+                console.error('ERREUR PUBLICATION:', error.message);
+                alert("Erreur de publication :\n" + error.message + "\n\nVérifiez que votre serveur Node.js est bien lancé sur le port 3000.");
+                messageDiv.textContent = '❌ Erreur: ' + error.message;
                 messageDiv.style.background = '#f8d7da';
                 messageDiv.style.color = '#721c24';
                 messageDiv.style.display = 'block';
@@ -456,15 +450,12 @@
             }
         }
 
-        // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
             fetchReviews();
             document.getElementById('rating-selector').innerHTML = renderStars(5, true) + '<span class="rating-text">(5/5)</span>';
             document.getElementById('show-form-btn').addEventListener('click', toggleForm);
         });
     </script>
-
     <script src="js/main.js"></script>
 </body>
-
 </html>

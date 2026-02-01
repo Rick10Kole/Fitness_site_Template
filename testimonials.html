@@ -9,8 +9,10 @@
     <style>
         .view-more-container { text-align: center; margin-top: 30px; margin-bottom: 20px; }
         .hidden-testimonial { display: none !important; }
-        .error-details { font-size: 0.8em; margin-top: 5px; opacity: 0.8; }
         .submit-message { padding: 15px; border-radius: 8px; margin-top: 15px; display: none; }
+        .rating-stars { color: #FFB800; display: flex; gap: 2px; }
+        .testimonial-card { transition: transform 0.3s ease; }
+        .testimonial-card:hover { transform: translateY(-5px); }
     </style>
 </head>
 <body>
@@ -72,12 +74,12 @@
                             </div>
                             <div class="form-group">
                                 <label>Votre note *</label>
-                                <div id="rating-selector"></div>
+                                <div id="rating-selector" style="display:flex; gap:5px; align-items:center;"></div>
                                 <input type="hidden" id="rating" name="rating" value="5">
                             </div>
                             <div class="form-group">
                                 <label>Votre commentaire *</label>
-                                <textarea name="comment" required rows="5" minlength="10"></textarea>
+                                <textarea name="comment" required rows="5" minlength="10" placeholder="Votre expérience..."></textarea>
                             </div>
                             <button type="submit" class="btn-primary btn-submit" id="testimonial-submit-btn">Publier mon avis</button>
                             <div class="submit-message" id="testimonial-message"></div>
@@ -113,9 +115,8 @@
     </div>
 
     <script>
-        // Force l'adresse du serveur Node.js sur le port 3000
-        const API_BASE = "http://localhost:3000";
-        const API_URL = API_BASE + "/api/reviews";
+        // On utilise le chemin relatif pour que ça marche via le serveur
+        const API_URL = "/api/reviews";
         
         let testimonialsData = [];
         let showForm = false;
@@ -124,15 +125,15 @@
         async function fetchReviews() {
             try {
                 const response = await fetch(API_URL);
-                if (!response.ok) throw new Error(`Erreur ${response.status}`);
+                if (!response.ok) throw new Error("Erreur serveur");
                 testimonialsData = await response.json();
                 renderTestimonials();
             } catch (error) {
                 console.error('Fetch error:', error);
                 document.getElementById('testimonials-grid').innerHTML = 
-                    `<p style="text-align:center; grid-column: 1/-1;">
-                        Impossible de charger les avis.<br>
-                        <small>Assurez-vous que votre serveur Node.js est lancé sur ${API_BASE}</small>
+                    `<p style="text-align:center; grid-column: 1/-1; padding: 20px; background: #f8d7da; color: #721c24; border-radius: 8px;">
+                        <strong>Le serveur n'est pas lancé.</strong><br>
+                        Lancez "node server.js" et ouvrez http://localhost:3000/testimonials.html
                     </p>`;
             }
         }
@@ -149,7 +150,7 @@
 
         function setRating(r) {
             document.getElementById('rating').value = r;
-            document.getElementById('rating-selector').innerHTML = renderStars(r, true) + ` <span>(${r}/5)</span>`;
+            document.getElementById('rating-selector').innerHTML = renderStars(r, true) + ` <span style="font-weight:bold; color:#FFB800;">${r}/5</span>`;
         }
 
         function updateStats() {
@@ -167,18 +168,23 @@
             const grid = document.getElementById('testimonials-grid');
             updateStats();
             grid.innerHTML = '';
+            
             testimonialsData.forEach((t, i) => {
                 const card = document.createElement('div');
                 card.className = 'testimonial-card network-card';
                 if (!allVisible && i >= 8) card.classList.add('hidden-testimonial');
+                
                 card.innerHTML = `
-                    <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
-                        <div style="width:40px; height:40px; background:#FFB800; color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold;">${t.name.charAt(0)}</div>
-                        <div><h3 style="margin:0; font-size:1.1em;">${t.name}</h3><small>${t.program}</small></div>
+                    <div style="display:flex; align-items:center; gap:12px; margin-bottom:15px;">
+                        <div style="width:45px; height:45px; background:linear-gradient(135deg, #FFB800, #FF8A00); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:1.2em; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">${t.name.charAt(0)}</div>
+                        <div>
+                            <h3 style="margin:0; font-size:1.1em; color: #333;">${t.name}</h3>
+                            <small style="color: #666; background: #eee; padding: 2px 8px; border-radius: 10px; font-size: 0.8em;">${t.program}</small>
+                        </div>
                     </div>
-                    <div>${renderStars(t.rating)}</div>
-                    <p style="font-style:italic; margin:15px 0;">"${t.comment}"</p>
-                    <small style="opacity:0.6;">${new Date(t.date).toLocaleDateString('fr-FR')}</small>
+                    <div class="rating-stars">${renderStars(t.rating)}</div>
+                    <p style="font-style:italic; margin:15px 0; color: #555; line-height: 1.6;">"${t.comment}"</p>
+                    <div style="text-align: right;"><small style="opacity:0.5; font-size: 0.85em;">${new Date(t.date).toLocaleDateString('fr-FR', {day:'numeric', month:'long', year:'numeric'})}</small></div>
                 `;
                 grid.appendChild(card);
             });
@@ -209,7 +215,7 @@
             };
 
             btn.disabled = true;
-            btn.textContent = 'Publication...';
+            btn.textContent = 'Publication en cours...';
             msg.style.display = 'none';
 
             try {
@@ -219,21 +225,25 @@
                     body: JSON.stringify(data)
                 });
 
-                if (!response.ok) {
-                    const result = await response.json();
-                    throw new Error(result.details || result.error || `Erreur ${response.status}`);
-                }
+                if (!response.ok) throw new Error("Erreur serveur");
 
                 const result = await response.json();
                 testimonialsData.unshift(result);
-                msg.innerHTML = '✅ Avis publié avec succès !';
+                
+                msg.innerHTML = '✅ Merci ! Votre avis a été enregistré et est maintenant visible par tous.';
                 msg.style.background = '#d4edda'; msg.style.color = '#155724';
                 msg.style.display = 'block';
-                form.reset(); setRating(5); renderTestimonials();
-                setTimeout(toggleForm, 2000);
+                
+                form.reset(); 
+                setRating(5); 
+                renderTestimonials();
+                
+                setTimeout(() => {
+                    toggleForm();
+                    msg.style.display = 'none';
+                }, 2500);
             } catch (error) {
-                console.error('Submit error:', error);
-                msg.innerHTML = `❌ <strong>Erreur de publication</strong><br><div class="error-details">${error.message}</div>`;
+                msg.innerHTML = `❌ Erreur de publication. Le serveur est-il bien lancé ?`;
                 msg.style.background = '#f8d7da'; msg.style.color = '#721c24';
                 msg.style.display = 'block';
             } finally {

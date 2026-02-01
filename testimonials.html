@@ -10,6 +10,7 @@
         .view-more-container { text-align: center; margin-top: 30px; margin-bottom: 20px; }
         .hidden-testimonial { display: none !important; }
         .error-details { font-size: 0.8em; margin-top: 5px; opacity: 0.8; }
+        .submit-message { padding: 15px; border-radius: 8px; margin-top: 15px; display: none; }
     </style>
 </head>
 <body>
@@ -79,7 +80,7 @@
                                 <textarea name="comment" required rows="5" minlength="10"></textarea>
                             </div>
                             <button type="submit" class="btn-primary btn-submit" id="testimonial-submit-btn">Publier mon avis</button>
-                            <div class="submit-message" id="testimonial-message" style="display: none; padding: 15px; border-radius: 8px; margin-top: 15px;"></div>
+                            <div class="submit-message" id="testimonial-message"></div>
                         </form>
                     </div>
                 </div>
@@ -112,7 +113,10 @@
     </div>
 
     <script>
-        const API_URL = '/api/reviews';
+        // Force l'adresse du serveur Node.js sur le port 3000
+        const API_BASE = "http://localhost:3000";
+        const API_URL = API_BASE + "/api/reviews";
+        
         let testimonialsData = [];
         let showForm = false;
         let allVisible = false;
@@ -125,7 +129,11 @@
                 renderTestimonials();
             } catch (error) {
                 console.error('Fetch error:', error);
-                document.getElementById('testimonials-grid').innerHTML = '<p style="text-align:center; grid-column: 1/-1;">Impossible de charger les avis. Vérifiez que le serveur est lancé.</p>';
+                document.getElementById('testimonials-grid').innerHTML = 
+                    `<p style="text-align:center; grid-column: 1/-1;">
+                        Impossible de charger les avis.<br>
+                        <small>Assurez-vous que votre serveur Node.js est lancé sur ${API_BASE}</small>
+                    </p>`;
             }
         }
 
@@ -165,7 +173,7 @@
                 if (!allVisible && i >= 8) card.classList.add('hidden-testimonial');
                 card.innerHTML = `
                     <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
-                        <div style="width:40px; height:40px; background:var(--brand-primary); color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold;">${t.name.charAt(0)}</div>
+                        <div style="width:40px; height:40px; background:#FFB800; color:white; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold;">${t.name.charAt(0)}</div>
                         <div><h3 style="margin:0; font-size:1.1em;">${t.name}</h3><small>${t.program}</small></div>
                     </div>
                     <div>${renderStars(t.rating)}</div>
@@ -211,12 +219,12 @@
                     body: JSON.stringify(data)
                 });
 
-                const result = await response.json();
-
                 if (!response.ok) {
-                    throw new Error(result.details || result.error || 'Erreur inconnue');
+                    const result = await response.json();
+                    throw new Error(result.details || result.error || `Erreur ${response.status}`);
                 }
 
+                const result = await response.json();
                 testimonialsData.unshift(result);
                 msg.innerHTML = '✅ Avis publié avec succès !';
                 msg.style.background = '#d4edda'; msg.style.color = '#155724';

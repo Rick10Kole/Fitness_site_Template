@@ -14,7 +14,7 @@
             <div class="container">
                 <nav class="nav-wrapper">
                     <a href="index.html" class="network-logo">
-                        <img src="/images/Fitness.jpg" alt="FitZone Gym Logo">
+                        <img src="images/RAINA_RITNESS_LOGO.png" alt="FitZone Gym Logo">
                         <span>RAINA FITNESS CENTER</span>
                     </a>
 
@@ -158,7 +158,7 @@
                 <div class="footer-content">
                     <div class="footer-section">
                         <div class="footer-logo">
-                            <img src="/images/Fitness.jpg" alt="FitZone Gym Logo">
+                            <img src="images/RAINA_RITNESS_LOGO.png" alt="FitZone Gym Logo">
                             <span>RAINA FITNESS CENTER</span>
                         </div>
                         <p class="footer-tagline">Transformez votre corps, transformez votre vie</p>
@@ -231,7 +231,7 @@
                                     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
                                     <polyline points="22,6 12,13 2,6"/>
                                 </svg>
-                                <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a5c6cacbd1c4c6d1e5c3ccd1dfcacbc0c2dcc88bc6cac8">[email&#160;protected]</a></span>
+                                <span>contact@fitzonegym.com</span>
                             </li>
                         </ul>
                     </div>
@@ -247,65 +247,52 @@
     </div>
 
     <!-- Embedded Testimonials Data -->
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-        let testimonialsData = [];
+    <script>
+        const testimonialsData = [
+            {
+                id: 1,
+                name: "Julie Moreau",
+                rating: 5,
+                comment: "FitZone a transformé ma vie ! L'équipe est incroyable, les coachs sont à l'écoute et les résultats sont au rendez-vous. J'ai perdu 15kg en 6 mois !",
+                date: "2025-01-15",
+                program: "HIIT & Cardio"
+            },
+            {
+                id: 2,
+                name: "Pierre Dupont",
+                rating: 5,
+                comment: "Meilleure salle de sport de Paris ! Les équipements sont top, l'ambiance est motivante et les cours de Crossfit sont exceptionnels.",
+                date: "2025-01-10",
+                program: "Crossfit"
+            },
+            {
+                id: 3,
+                name: "Marie Leclerc",
+                rating: 5,
+                comment: "Je recommande à 100% ! Les cours de Yoga m'ont aidée à gérer mon stress et à améliorer ma posture. Sophie est une coach formidable.",
+                date: "2024-12-20",
+                program: "Yoga & Pilates"
+            },
+            {
+                id: 4,
+                name: "Alexandre Bernard",
+                rating: 5,
+                comment: "Excellent rapport qualité-prix. Les programmes sont variés et adaptés à tous les niveaux. J'ai pris 8kg de muscle en 4 mois !",
+                date: "2024-12-15",
+                program: "Musculation"
+            },
+            {
+                id: 5,
+                name: "Camille Rousseau",
+                rating: 5,
+                comment: "Une vraie communauté ! On se sent soutenu et encouragé. Les résultats sont impressionnants et l'atmosphère est conviviale.",
+                date: "2024-12-05",
+                program: "Crossfit"
+            }
+        ];
+
         let currentRating = 5;
         let showForm = false;
-
-        // Charger les avis depuis le serveur
-        async function loadTestimonials() {
-            try {
-                const response = await fetch('http://localhost:3000/api/reviews');
-                testimonialsData = await response.json();
-                renderTestimonials();
-            } catch (error) {
-                console.error('Erreur lors du chargement des avis:', error);
-                // En cas d'erreur, utiliser les données par défaut
-                testimonialsData = [
-                    {
-                        id: 1,
-                        name: "Julie Moreau",
-                        rating: 5,
-                        comment: "FitZone a transformé ma vie ! L'équipe est incroyable, les coachs sont à l'écoute et les résultats sont au rendez-vous. J'ai perdu 15kg en 6 mois !",
-                        date: "2025-01-15",
-                        program: "HIIT & Cardio"
-                    },
-                    {
-                        id: 2,
-                        name: "Pierre Dupont",
-                        rating: 5,
-                        comment: "Meilleure salle de sport de Paris ! Les équipements sont top, l'ambiance est motivante et les cours de Crossfit sont exceptionnels.",
-                        date: "2025-01-10",
-                        program: "Crossfit"
-                    },
-                    {
-                        id: 3,
-                        name: "Marie Leclerc",
-                        rating: 5,
-                        comment: "Je recommande à 100% ! Les cours de Yoga m'ont aidée à gérer mon stress et à améliorer ma posture. Sophie est une coach formidable.",
-                        date: "2024-12-20",
-                        program: "Yoga & Pilates"
-                    },
-                    {
-                        id: 4,
-                        name: "Alexandre Bernard",
-                        rating: 5,
-                        comment: "Excellent rapport qualité-prix. Les programmes sont variés et adaptés à tous les niveaux. J'ai pris 8kg de muscle en 4 mois !",
-                        date: "2024-12-15",
-                        program: "Musculation"
-                    },
-                    {
-                        id: 5,
-                        name: "Camille Rousseau",
-                        rating: 5,
-                        comment: "Une vraie communauté ! On se sent soutenu et encouragé. Les résultats sont impressionnants et l'atmosphère est conviviale.",
-                        date: "2024-12-05",
-                        program: "Crossfit"
-                    }
-                ];
-                renderTestimonials();
-            }
-        }
 
         function renderStars(rating, interactive = false) {
             let html = '';
@@ -389,7 +376,7 @@
             }
         }
 
-        async function handleTestimonialsSubmit(event) {
+        function handleTestimonialsSubmit(event) {
             event.preventDefault();
 
             const form = event.target;
@@ -399,58 +386,30 @@
             submitBtn.disabled = true;
             submitBtn.textContent = 'Envoi en cours...';
 
-            const newReview = {
-                name: document.getElementById('testimonial-name').value,
-                email: document.getElementById('testimonial-email').value,
-                program: document.getElementById('testimonial-program').value,
-                rating: parseInt(document.getElementById('rating').value),
-                comment: document.getElementById('testimonial-comment').value,
-                date: new Date().toISOString().split('T')[0]
-            };
-
-            try {
-                const response = await fetch('http://localhost:3000/api/reviews', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(newReview)
-                });
-
-                if (response.ok) {
-                    messageDiv.textContent = '✅ Merci pour votre avis ! Il a été publié avec succès.';
-                    messageDiv.style.background = '#d4edda';
-                    messageDiv.style.color = '#155724';
-                    messageDiv.style.display = 'block';
-
-                    form.reset();
-                    currentRating = 5;
-                    setRating(5);
-                    toggleForm();
-
-                    // Recharger les avis
-                    await loadTestimonials();
-
-                    setTimeout(() => {
-                        messageDiv.style.display = 'none';
-                    }, 5000);
-                } else {
-                    throw new Error('Erreur lors de l\'envoi');
-                }
-            } catch (error) {
-                messageDiv.textContent = '❌ Erreur lors de l\'envoi. Veuillez réessayer.';
-                messageDiv.style.background = '#f8d7da';
-                messageDiv.style.color = '#721c24';
+            // Simulate submission (standalone version - no backend)
+            setTimeout(() => {
+                messageDiv.textContent = '✅ Merci pour votre avis ! Il sera publié après modération.';
+                messageDiv.style.background = '#d4edda';
+                messageDiv.style.color = '#155724';
                 messageDiv.style.display = 'block';
-            }
 
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Publier mon avis';
+                form.reset();
+                currentRating = 5;
+                setRating(5);
+                toggleForm();
+
+                setTimeout(() => {
+                    messageDiv.style.display = 'none';
+                }, 5000);
+
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Publier mon avis';
+            }, 1000);
         }
 
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
-            loadTestimonials();
+            renderTestimonials();
 
             // Initialize rating selector
             document.getElementById('rating-selector').innerHTML = renderStars(5, true) + '<span class="rating-text">(5/5)</span>';

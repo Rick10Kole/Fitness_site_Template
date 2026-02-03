@@ -10,68 +10,40 @@ const REVIEWS_FILE = path.join(__dirname, 'reviews.json');
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static(__dirname));
+app.use(express.static(__dirname)); // Sert les fichiers statiques (html, css, js)
 
-// Fonction pour lire les avis
-const getReviews = () => {
-    try {
-        if (!fs.existsSync(REVIEWS_FILE)) return [];
-        const data = fs.readFileSync(REVIEWS_FILE, 'utf8');
-        return JSON.parse(data || '[]');
-    } catch (err) {
-        console.error("Erreur de lecture:", err);
-        return [];
-    }
-};
-
-// Fonction pour sauvegarder les avis
-const saveReviews = (reviews) => {
-    try {
-        fs.writeFileSync(REVIEWS_FILE, JSON.stringify(reviews, null, 4), 'utf8');
-        return true;
-    } catch (err) {
-        console.error("Erreur d'écriture:", err);
-        return false;
-    }
-};
-
-// Route pour récupérer les avis
+// Route pour récupérer tous les avis
 app.get('/api/reviews', (req, res) => {
-    res.json(getReviews());
+    fs.readFile(REVIEWS_FILE, 'utf8', (err, data) => {
+        if (err) {
+            return res.status(500).json({ error: 'Erreur lors de la lecture des avis' });
+        }
+        res.json(JSON.parse(data));
+    });
 });
 
-// Route pour ajouter un avis
+// Route pour ajouter un nouvel avis
 app.post('/api/reviews', (req, res) => {
-    const { name, rating, comment, program, date } = req.body;
+    const newReview = req.body;
     
-    if (!name || !rating || !comment) {
-        return res.status(400).json({ error: "Champs manquants" });
-    }
-
-    const reviews = getReviews();
-    const newReview = {
-        id: Date.now(),
-        name,
-        rating: parseInt(rating),
-        comment,
-        program: program || 'Général',
-        date: date || new Date().toISOString().split('T')[0]
-    };
-
-    reviews.unshift(newReview); // Ajouter au début de la liste
-    
-    if (saveReviews(reviews)) {
-        console.log(`✅ Nouvel avis de ${name} enregistré.`);
-        res.status(201).json(newReview);
-    } else {
-        res.status(500).json({ error: "Erreur de sauvegarde sur le serveur" });
-    }
+    fs.readFile(REVIEWS_FILE, 'utf8', (err, data) => {
+        if (err) {
+            return res.status(500).json({ error: 'Erreur lors de la lecture des avis' });
+        }
+        
+        const reviews = JSON.parse(data);
+        newReview.id = Date.now(); // ID unique basé sur le temps
+        reviews.unshift(newReview); // Ajouter au début
+        
+        fs.writeFile(REVIEWS_FILE, JSON.stringify(reviews, null, 4), (err) => {
+            if (err) {
+                return res.status(500).json({ error: 'Erreur lors de la sauvegarde de l\'avis' });
+            }
+            res.status(201).json(newReview);
+        });
+    });
 });
 
-app.listen(PORT, '0.0.0.0', () => {
-    console.log(`==========================================`);
-    console.log(`SERVEUR FITZONE GYM LANCÉ`);
-    console.log(`URL : http://localhost:${PORT}`);
-    console.log(`Stockage : reviews.json`);
-    console.log(`==========================================`);
+app.listen(PORT, () => {
+    console.log(`Serveur démarré sur http://localhost:${PORT}`);
 });

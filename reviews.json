@@ -41,7 +41,7 @@
     }
 
     {
-        "id": 1,
+        "id": 6,
         "name": "Julie Moreau",
         "rating": 5,
         "comment": "FitZone a transformé ma vie ! L'équipe est incroyable, les coachs sont à l'écoute et les résultats sont au rendez-vous. J'ai perdu 15kg en 6 mois !",
@@ -49,7 +49,7 @@
         "program": "HIIT & Cardio"
     },
     {
-        "id": 2,
+        "id": 7,
         "name": "Pierre Dupont",
         "rating": 5,
         "comment": "Meilleure salle de sport de Paris ! Les équipements sont top, l'ambiance est motivante et les cours de Crossfit sont exceptionnels.",

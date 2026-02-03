@@ -14,7 +14,7 @@
             <div class="container">
                 <nav class="nav-wrapper">
                     <a href="index.html" class="network-logo">
-                        <img src="images/RAINA_RITNESS_LOGO.png" alt="FitZone Gym Logo">
+                        <img src="/images/Fitness.jpg" alt="FitZone Gym Logo">
                         <span>RAINA FITNESS CENTER</span>
                     </a>
 
@@ -158,7 +158,7 @@
                 <div class="footer-content">
                     <div class="footer-section">
                         <div class="footer-logo">
-                            <img src="images/RAINA_RITNESS_LOGO.png" alt="FitZone Gym Logo">
+                            <img src="/images/Fitness.jpg" alt="FitZone Gym Logo">
                             <span>RAINA FITNESS CENTER</span>
                         </div>
                         <p class="footer-tagline">Transformez votre corps, transformez votre vie</p>
@@ -231,7 +231,7 @@
                                     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
                                     <polyline points="22,6 12,13 2,6"/>
                                 </svg>
-                                <span>contact@fitzonegym.com</span>
+                                <span><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1d7e7273697c7e695d7b7469677273787a6470337e7270">[email&#160;protected]</a></span>
                             </li>
                         </ul>
                     </div>
@@ -247,7 +247,7 @@
     </div>
 
     <!-- Embedded Testimonials Data -->
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         const testimonialsData = [
             {
                 id: 1,
@@ -293,6 +293,11 @@
 
         let currentRating = 5;
         let showForm = false;
+        
+        // Pagination variables
+        const INITIAL_DISPLAY = 8;
+        const LOAD_MORE_COUNT = 10;
+        let displayedCount = 0;
 
         function renderStars(rating, interactive = false) {
             let html = '';
@@ -315,6 +320,70 @@
             document.getElementById('rating-selector').innerHTML = renderStars(rating, true) + `<span class="rating-text">(${rating}/5)</span>`;
         }
 
+        function createTestimonialCard(testimonial, index) {
+            const testimonialCard = document.createElement('div');
+            testimonialCard.className = 'testimonial-card network-card animate-fadeInUp';
+            testimonialCard.style.animationDelay = `${(index % 10) * 0.1}s`;
+
+            const date = new Date(testimonial.date).toLocaleDateString('fr-FR', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            testimonialCard.innerHTML = `
+                <div class="testimonial-header">
+                    <div class="testimonial-avatar">${testimonial.name.charAt(0)}</div>
+                    <div class="testimonial-info">
+                        <h3 class="heading-3">${testimonial.name}</h3>
+                        <span class="program-tag">${testimonial.program}</span>
+                    </div>
+                </div>
+                
+                <div class="testimonial-rating">
+                    ${renderStars(testimonial.rating)}
+                </div>
+
+                <p class="body-medium testimonial-comment">
+                    "${testimonial.comment}"
+                </p>
+
+                <div class="testimonial-date">${date}</div>
+            `;
+
+            return testimonialCard;
+        }
+
+        function updateLoadMoreButton() {
+            const loadMoreContainer = document.getElementById('load-more-container');
+            
+            if (displayedCount < testimonialsData.length) {
+                const remaining = testimonialsData.length - displayedCount;
+                loadMoreContainer.style.display = 'flex';
+                loadMoreContainer.innerHTML = `
+                    <button class="btn-primary btn-large" id="load-more-btn" onclick="loadMoreTestimonials()">
+                        Voir plus (${remaining} avis restants)
+                    </button>
+                `;
+            } else {
+                loadMoreContainer.style.display = 'none';
+            }
+        }
+
+        function loadMoreTestimonials() {
+            const testimonialsGrid = document.getElementById('testimonials-grid');
+            const startIndex = displayedCount;
+            const endIndex = Math.min(displayedCount + LOAD_MORE_COUNT, testimonialsData.length);
+
+            for (let i = startIndex; i < endIndex; i++) {
+                const testimonialCard = createTestimonialCard(testimonialsData[i], i);
+                testimonialsGrid.appendChild(testimonialCard);
+            }
+
+            displayedCount = endIndex;
+            updateLoadMoreButton();
+        }
+
         function renderTestimonials() {
             const testimonialsGrid = document.getElementById('testimonials-grid');
             const testimonialsCount = document.getElementById('testimonials-count');
@@ -326,40 +395,31 @@
             countNumber.textContent = `${testimonialsData.length}+`;
 
             testimonialsGrid.innerHTML = '';
+            
+            // Create load more container if it doesn't exist
+            let loadMoreContainer = document.getElementById('load-more-container');
+            if (!loadMoreContainer) {
+                loadMoreContainer = document.createElement('div');
+                loadMoreContainer.id = 'load-more-container';
+                loadMoreContainer.style.cssText = 'display: flex; justify-content: center; margin-top: 40px; width: 100%;';
+                testimonialsGrid.parentNode.insertBefore(loadMoreContainer, testimonialsGrid.nextSibling);
+            }
 
-            testimonialsData.forEach((testimonial, index) => {
-                const testimonialCard = document.createElement('div');
-                testimonialCard.className = 'testimonial-card network-card animate-fadeInUp';
-                testimonialCard.style.animationDelay = `${index * 0.1}s`;
+            // Reset displayed count
+            displayedCount = 0;
 
-                const date = new Date(testimonial.date).toLocaleDateString('fr-FR', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric'
-                });
-
-                testimonialCard.innerHTML = `
-                    <div class="testimonial-header">
-                        <div class="testimonial-avatar">${testimonial.name.charAt(0)}</div>
-                        <div class="testimonial-info">
-                            <h3 class="heading-3">${testimonial.name}</h3>
-                            <span class="program-tag">${testimonial.program}</span>
-                        </div>
-                    </div>
-                    
-                    <div class="testimonial-rating">
-                        ${renderStars(testimonial.rating)}
-                    </div>
-
-                    <p class="body-medium testimonial-comment">
-                        "${testimonial.comment}"
-                    </p>
-
-                    <div class="testimonial-date">${date}</div>
-                `;
-
+            // Display initial testimonials (8 or less if total is less than 8)
+            const initialCount = Math.min(INITIAL_DISPLAY, testimonialsData.length);
+            
+            for (let i = 0; i < initialCount; i++) {
+                const testimonialCard = createTestimonialCard(testimonialsData[i], i);
                 testimonialsGrid.appendChild(testimonialCard);
-            });
+            }
+
+            displayedCount = initialCount;
+            
+            // Update load more button visibility
+            updateLoadMoreButton();
         }
 
         function toggleForm() {
